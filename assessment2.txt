@@ -1,0 +1,50 @@
+1.Create a named volume:
+Create a Docker volume named "devops" using the docker volume create command.
+    $ docker volume create devops
+
+Verify that the volume is created.
+    $ docker volume ls
+
+Attach a volume to a container, Create a new container and attach the "devops" volume using the -v
+    $ docker run -it --name container_name -v /devops:/data nginx 
+
+Start the container and execute commands inside it to create, modify, or delete files within the volume.
+    $ docker start container_name
+    $ docker exec -it container_name /bin/bash
+    touch /data/file.txt
+    echo "Welcome" >> file.txt
+    rm file.txt
+
+Stop and remove the container, ensuring that the volume is preserved.
+   $ docker stop container_id
+    $ docker rm container_id
+
+2.Mount a host directory as a volume:
+Create a directory on your host machine.
+    mkdir docker
+
+Start a new container and mount the host directory as a volume using the -v
+    $ docker run -it --name container_name -v /home/docker:/data nginx
+
+Verify that the container can access and modify files within the mounted volume.
+    exit container and create file in mount
+    touch file2.txt
+    echo "hello world" >> file2.txt
+        
+Stop and remove the container, ensuring that the host directory remains intact.
+    $ docker stop container_id
+    $ docker rm container_id
+
+3.Backup and restore a volume:
+Create a container and attach a volume to it.
+    $ docker run -it --name container_name -v /home/devops:/data nginx /bin/bash
+Populate the volume with some data or files.
+    df -hT
+    create a file 
+Remove the container and recreate it, or use a new container with the same volume.
+    $ docker stop container_name
+    $ docker rm container_name
+    $ docker run -it -v container_name:/path nginx /bin/bash
+    (container deleted, but volume exist)
+Restore the volume's contents from the backup.
+    cp cmd is used
